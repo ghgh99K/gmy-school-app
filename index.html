@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة الموارد البشرية - مؤسسة الجيل الثالث</title>
+  
+  <!-- خط Cairo -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- إطار Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- مكتبة الأيقونات (Bootstrap Icons) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <!-- ملف التنسيقات الموحد -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    :root { 
+      --primary-color: #2563eb; 
+      --primary-hover: #1d4ed8;
+      --bg-color: #f4f7fe; 
+      --sidebar-bg: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --border-color: #e2e8f0;
+    }
+    
+    body { 
+      background: var(--bg-color); 
+      font-family: 'Cairo', sans-serif; 
+      color: var(--text-main);
+    }
+
+    /* صفحة الدخول */
+    #login-page { 
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+      position: fixed; inset: 0; z-index: 9999; display: flex; 
+      align-items: center; justify-content: center; padding: 20px; 
+    }
+    .login-card {
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+      border-radius: 24px; padding: 40px 30px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+      width: 100%; max-width: 400px;
+    }
+    .login-card input {
+      border-radius: 12px; padding: 12px 15px; border: 1px solid var(--border-color);
+      background: #f8fafc; transition: all 0.3s;
+    }
+    .login-card input:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: var(--primary-color); background: #fff; }
+
+    /* القائمة الجانبية */
+    .sidebar { 
+      background: var(--sidebar-bg); 
+      width: 280px; height: 100vh; position: fixed; right: 0; top: 0; 
+      padding: 30px 20px; transition: 0.3s; overflow-y: auto; z-index: 1000; 
+      box-shadow: -4px 0 24px rgba(149, 157, 165, 0.1);
+      border-left: 1px solid var(--border-color);
+    }
+    .sidebar-logo-text { font-weight: 800; color: var(--primary-color); border-bottom: 2px dashed var(--border-color); }
+    
+    .nav-link { 
+      color: #64748b; cursor: pointer; padding: 14px 20px; 
+      border-radius: 12px; margin-bottom: 8px; font-weight: 700; 
+      transition: all 0.2s ease; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-link i { font-size: 1.2rem; }
+    .nav-link:hover { background: #f1f5f9; color: var(--primary-color); transform: translateX(-4px); }
+    .nav-link.active { background: var(--primary-color); color: white; box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2); }
+    .nav-link.active i { color: white; }
+
+    /* البطاقات والمحتوى */
+    .content { margin-right: 280px; padding: 30px; transition: 0.3s; }
+    .card { 
+      border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02); 
+      margin-bottom: 24px; background: var(--card-bg); transition: 0.3s;
+    }
+    .card-header-modern { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+    .card-header-modern i { font-size: 1.5rem; color: var(--primary-color); }
+    
+    /* الجداول */
+    .table-responsive { border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
+    .table { margin-bottom: 0; }
+    .table thead { background: #f8fafc; }
+    .table th { color: #475569; font-weight: 700; border-bottom: 1px solid var(--border-color); padding: 16px; font-size: 0.9rem;}
+    .table td { padding: 16px; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+    .table-hover tbody tr:hover { background-color: #f8fafc; }
+
+    /* الحالات (Badges) */
+    .badge-green { background-color: #10b981; color: white; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; }
+    .badge-red { background-color: #ef4444; color: white; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; }
+    .text-orange { color: #f59e0b !important; }
+
+    /* الأزرار والمدخلات */
+    .btn { border-radius: 10px; font-weight: 700; padding: 10px 20px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .form-control, .form-select { border-radius: 10px; padding: 10px 15px; border: 1px solid var(--border-color); background-color: #f8fafc; font-weight: 600;}
+    .form-control:focus, .form-select:focus { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); border-color: var(--primary-color); background-color: #fff;}
+    
+    .floating-btn { 
+      position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; 
+      border-radius: 50%; background: var(--primary-color); 
+      color: white; border: none; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); 
+      font-size: 24px; z-index: 999; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      display: flex; align-items: center; justify-content: center;
+    }
+    .floating-btn:hover { transform: scale(1.1) rotate(180deg); }
+
+    .menu-btn { display: none; position: fixed; top: 15px; right: 15px; z-index: 1001; background: var(--primary-color); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    /* تصميم بطاقة الواتساب */
+    .whatsapp-card { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border: 1px solid #bbf7d0; cursor: pointer; }
+    .whatsapp-card:hover { box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.15); transform: translateY(-2px); }
+    .icon-wrapper { width: 70px; height: 70px; border-radius: 20px; background: #dcfce7; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #16a34a; font-size: 2rem; }
+
+    /* حاوية المبيان المضبوطة */
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(100%); width: 260px; }
+      .sidebar.active { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+      .content { margin-right: 0; padding: 15px; padding-top: 80px; }
+      .menu-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-btn" onclick="toggleMenu()"><i class="bi bi-list"></i> القائمة</button>
+  <button class="floating-btn" onclick="loadData()" title="تحديث البيانات"><i class="bi bi-arrow-repeat"></i></button>
+
+  <!-- صفحة تسجيل الدخول -->
+  <div id="login-page">
+    <div class="login-card text-center">
+      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhMUJtfA_Xg8F__XYlgd2Z8C6FXlj_iFfS6oESl7nNX-fN6rPG9o0vbtQdtkADbwJ1tkkgMxt4C5RoEEGxvUfGr0D1XJmZT3LlBQ4ejM8dE2D1JZcny6m7AKLVZ-5EI6rsWipFJ4LaR8V7G703Fpf82nnu3zhghI8Pms6FcEWPHHRVRVxYvQeafLLs9jkIw=s484" style="max-width: 150px;" class="mx-auto mb-4" alt="شعار المؤسسة">
+      <h5 class="fw-bold mb-4" style="color: #1e293b;">بوابة الموارد البشرية</h5>
+      <form onsubmit="event.preventDefault(); doLogin();">
+        <div class="position-relative mb-3">
+          <input type="text" id="u" name="username" autocomplete="username" class="form-control ps-3" placeholder="اسم المستخدم">
+        </div>
+        <div class="position-relative mb-4">
+          <input type="password" id="p" name="password" autocomplete="current-password" class="form-control ps-3" placeholder="كلمة المرور">
+        </div>
+        <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">تسجيل الدخول <i class="bi bi-box-arrow-in-left"></i></button>
+      </form>
+      <div id="err" class="text-danger mt-3 small fw-bold"></div>
+    </div>
+  </div>
+
+  <!-- التطبيق الرئيسي -->
+  <div id="main-app" class="d-none">
+    
+    <!-- القائمة الجانبية -->
+    <div class="sidebar" id="sidebar">
+      <h5 class="text-center mb-4 pb-3 sidebar-logo-text"><i class="bi bi-buildings-fill ms-2"></i> مؤسسة الجيل الثالث</h5>
+      <nav class="nav flex-column mt-2">
+        <a class="nav-link active" onclick="showSec('report')"><i class="bi bi-bar-chart-fill"></i> التقرير الميداني</a>
+        <a class="nav-link" onclick="showSec('archive')"><i class="bi bi-archive-fill"></i> الأرشيف اليومي</a>
+        <a class="nav-link" onclick="showSec('visit')"><i class="bi bi-people-fill"></i> الزوار والتحركات</a>
+        <a class="nav-link" onclick="showSec('just')"><i class="bi bi-envelope-paper-fill"></i> صندوق التبريرات</a>
+        <a class="nav-link" onclick="showSec('admin')"><i class="bi bi-gear-fill"></i> الإدارة الشاملة</a>
+      </nav>
+    </div>
+
+    <!-- المحتوى -->
+    <div class="content">
+      
+      <!-- قسم التقرير الميداني -->
+      <section id="report-sec">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card p-4">
+              <div class="card-header-modern">
+                <i class="bi bi-calendar2-check"></i>
+                <h5 class="fw-bold mb-0 text-primary">تقرير اليوم: <span id="today-date" class="badge bg-light text-dark border ms-2"></span></h5>
+              </div>
+              <div class="table-responsive">
+                <table class="table align-middle table-hover text-center">
+                  <thead>
+                    <tr><th>الرقم</th><th>الاسم</th><th>التاريخ</th><th>الدخول</th><th>حالة الدخول</th><th>الالتزام الصباحي</th><th>الخروج</th><th>حالة الخروج</th></tr>
+                  </thead>
+                  <tbody id="report-rows"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-8 mb-4">
+            <div class="card p-4">
+              <div class="card-header-modern mb-2">
+                <i class="bi bi-pie-chart-fill text-secondary"></i>
+                <h6 class="fw-bold mb-0 text-secondary">مبيان الفئات (جدول 4)</h6>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="mainChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4">
+            <div class="card whatsapp-card p-4 text-center h-100 d-flex flex-column justify-content-center align-items-center" onclick="new bootstrap.Modal(document.getElementById('msgModal')).show()">
+              <div class="icon-wrapper mb-3"><i class="bi bi-whatsapp"></i></div>
+              <h1 class="display-3 fw-bold text-success mb-1" id="msg-count">0</h1>
+              <p class="fs-5 fw-bold text-secondary mb-0">رسائل واردة اليوم</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- قسم الأرشيف -->
+      <section id="archive-sec" class="d-none">
+        <div class="card p-4">
+          <div class="card-header-modern">
+            <i class="bi bi-search"></i>
+            <h5 class="fw-bold text-primary mb-0">البحث في الأرشيف اليومي</h5>
+          </div>
+          <div class="row g-3 mb-4 align-items-end bg-light p-3 rounded-3 border">
+            <div class="col-md-5">
+              <label class="small fw-bold mb-2 text-secondary">حدد التاريخ لتبديل الأرشيف:</label>
+              <input type="date" id="arc-date" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <button onclick="fetchArchive()" class="btn btn-primary w-100 fw-bold"><i class="bi bi-search"></i> بحث في السجلات</button>
+            </div>
+          </div>
+          <div class="table-responsive mt-2">
+            <table class="table align-middle table-hover text-center">
+              <thead>
+                <tr><th>الرقم</th><th>الاسم</th><th>التاريخ</th><th>الدخول</th><th>حالة الدخول</th><th>الالتزام الصباحي</th><th>الخروج</th><th>حالة الخروج</th></tr>
+              </thead>
+              <tbody id="arc-rows">
+                <tr><td colspan="8" class="text-center text-muted py-5 fw-bold"><i class="bi bi-calendar-event display-6 d-block mb-3 opacity-50"></i>الرجاء تحديد تاريخ والضغط على "بحث" لجلب البيانات...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- قسم الزوار والتحركات -->
+      <section id="visit-sec" class="d-none">
+        <div class="card p-4 mb-4">
+          <div class="card-header-modern">
+            <i class="bi bi-person-badge-fill text-primary"></i>
+            <h5 class="fw-bold text-primary mb-0">سجل الأساتذة الزائرين</h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle table-hover text-center">
+              <thead>
+                <tr>
+                  <th>التاريخ</th>
+                  <th>اسم الأستاذ الزائر</th>
+                  <th>السلك التعليمي</th>
+                  <th>المادة</th>
+                  <th>عدد الساعات</th>
+                  <th>مجموع الشهر</th>
+                </tr>
+              </thead>
+              <tbody id="visit-rows">
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4 fw-bold">
+                    <i class="bi bi-person-x fs-3 d-block mb-2 opacity-50"></i>
+                    جاري تحميل بيانات الزوار...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card p-4">
+          <div class="card-header-modern">
+            <i class="bi bi-arrow-left-right text-info"></i>
+            <h5 class="fw-bold text-info mb-0">سجل تحركات الموظفين</h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle table-hover text-center">
+              <thead>
+                <tr>
+                  <th>التاريخ والوقت</th>
+                  <th>الحارس العام</th>
+                  <th>الموظف / الأستاذ</th>
+                  <th>سبب الحركة والتبرير</th>
+                </tr>
+              </thead>
+              <tbody id="moves-rows">
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-4 fw-bold">
+                    <i class="bi bi-clock-history fs-3 d-block mb-2 opacity-50"></i>
+                    جاري تحميل سجل التحركات...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- قسم صندوق التبريرات -->
+      <section id="just-sec" class="d-none">
+        <div class="card p-4">
+          <div class="card-header-modern">
+            <i class="bi bi-inbox-fill text-info"></i>
+            <h5 class="fw-bold text-info mb-0">صندوق التبريرات الواردة</h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead><tr><th>التاريخ</th><th>الرقم</th><th>الاسم</th><th>النوع</th><th>المبرر</th></tr></thead>
+              <tbody id="just-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- قسم الإدارة الشاملة -->
+      <section id="admin-sec" class="d-none">
+        <div class="card p-4 mb-4">
+          <div class="card-header-modern">
+            <i class="bi bi-person-lines-fill"></i>
+            <h5 class="fw-bold text-primary mb-0">إدارة شؤون الموظفين</h5>
+          </div>
+          
+          <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
+            <div class="col-md-2">
+              <label class="small fw-bold mb-1 text-secondary">الرقم (ID)</label>
+              <input id="st-id" class="form-control" placeholder="مثلاً: 101">
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-bold mb-1 text-secondary">الاسم الكامل</label>
+              <input id="st-name" class="form-control" placeholder="اسم الموظف">
+            </div>
+            <div class="col-md-3">
+              <label class="small fw-bold mb-1 text-secondary">الهاتف</label>
+              <input id="st-phone" class="form-control" placeholder="2126...">
+            </div>
+            <div class="col-md-2">
+              <label class="small fw-bold mb-1 text-secondary">الفئة</label>
+              <select id="st-cat" class="form-select"></select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button onclick="addStaff()" class="btn btn-primary w-100 fw-bold"><i class="bi bi-floppy-fill"></i> حفظ</button>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between p-3 rounded-3 border">
+            <div>
+              <button onclick="loadBulkEdit()" class="btn btn-outline-success fw-bold"><i class="bi bi-table"></i> تعديل الكل دفعة واحدة</button>
+            </div>
+            
+            <div class="input-group" style="max-width: 450px;">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <input id="edit-id-find" class="form-control border-start-0 ps-0" placeholder="أدخل ID للبحث...">
+              <button onclick="findAndEdit()" class="btn btn-primary fw-bold">جلب البيانات</button>
+              <button onclick="delStaff()" class="btn btn-danger fw-bold"><i class="bi bi-trash-fill"></i></button>
+            </div>
+          </div>
+
+          <div id="bulk-box" class="d-none mt-4 p-4 rounded-3 border border-success bg-white shadow-sm">
+            <h6 class="fw-bold mb-3 text-success"><i class="bi bi-pencil-square ms-1"></i> تعديل بيانات الموظفين دفعة واحدة:</h6>
+            <div class="table-responsive rounded-2 border-success border-opacity-25 border mb-3">
+              <table class="table table-sm table-hover mb-0">
+                <thead class="table-success opacity-75">
+                  <tr><th class="py-2">ID</th><th class="py-2">الاسم</th><th class="py-2">الهاتف</th><th class="py-2">الفئة</th></tr>
+                </thead>
+                <tbody id="bulk-rows" class="bg-white"></tbody>
+              </table>
+            </div>
+            <button onclick="saveBulk()" class="btn btn-success fw-bold px-4"><i class="bi bi-check-circle-fill"></i> اعتماد التعديلات الجماعية</button>
+          </div>
+        </div>
+
+        <!-- قسم ضبط أوقات الفئات -->
+        <div class="card p-4">
+          <div class="card-header-modern text-secondary">
+            <i class="bi bi-hourglass-split"></i>
+            <h5 class="fw-bold mb-0">ضبط أوقات الفئات</h5>
+          </div>
+          <div class="row g-3 align-items-end p-3 bg-light rounded-3 border">
+            
+            <div class="col-md-3 d-flex gap-2 justify-content-start">
+              <button onclick="delCat()" class="btn btn-outline-danger px-3" title="حذف الفئة"><i class="bi bi-trash3-fill"></i></button>
+              <button onclick="renameCat()" class="btn btn-outline-primary px-3" title="تغيير اسم الفئة"><i class="bi bi-pencil-fill"></i></button>
+              <button onclick="saveCat()" class="btn btn-secondary fw-bold flex-grow-1">حفظ الإعدادات</button>
+            </div>
+
+            <div class="col-md-2">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <input type="time" id="t-s" class="form-control" step="1" disabled>
+                  <div class="form-check ms-2 mb-0">
+                    <input type="checkbox" id="has-s" class="form-check-input" onchange="toggleS()">
+                    <label class="form-check-label small fw-bold text-secondary" for="has-s">السبت</label>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+              <label class="small fw-bold mb-1 text-secondary d-flex align-items-center justify-content-end w-100">دخول (وقت العمل)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-clock"></i></span>
+                <input type="time" id="t-w" class="form-control" step="1">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="small fw-bold mb-1 text-secondary d-flex align-items-center justify-content-end w-100">الفئة المستهدفة</label>
+              <div class="d-flex gap-2">
+                <button onclick="toggleNewCatMode()" class="btn btn-outline-secondary" title="إضافة فئة جديدة"><i class="bi bi-plus-lg"></i></button>
+                <select id="ed-cat-sel" class="form-select text-end" onchange="fillCatTimes()" dir="rtl"></select>
+              </div>
+              <input id="new-cat-name" class="form-control mt-2 d-none text-end" placeholder="اكتب اسم الفئة الجديدة">
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- نافذة رسائل الواتساب المنبثقة -->
+  <div class="modal fade" id="msgModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header text-white" style="background: var(--primary-color);">
+          <h5 class="fw-bold mb-0"><i class="bi bi-chat-left-text-fill ms-2"></i> تفاصيل الرسائل</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="table-responsive mb-0 border-0 rounded-0">
+            <table class="table table-hover mb-0 text-center align-middle">
+              <thead class="bg-light"><tr><th class="py-3">الموظف</th><th class="py-3">الرسالة</th><th class="py-3">الحالة</th></tr></thead>
+              <tbody id="msg-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ربط ملف البرمجة الموحد -->
+  <script src="js/api.js"></script>
+
+  <!-- السكريبت التفاعلي للبوابة -->
+  <script>
+    let myChart; let allCats = []; let catTimes = []; let isNewCat = false;
+    
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+
+    // استخدام دالة apiCall الموحدة والموجودة داخل js/api.js
+    async function callBackend(action, data = {}) {
+      return await apiCall(action, data);
+    }
+    
+    async function doLogin() { 
+      const u = document.getElementById('u').value;
+      const p = document.getElementById('p').value;
+      try {
+        const res = await callBackend('login', { u: u, p: p });
+        if(res && res.success) { 
+          document.getElementById('login-page').classList.add('d-none'); 
+          document.getElementById('main-app').classList.remove('d-none'); 
+          loadData(); 
+        } else {
+          alert("بيانات خاطئة!"); 
+        }
+      } catch(e) { console.error(e); }
+    }
+    
+    async function loadData() {
+      document.getElementById('today-date').innerText = new Date().toLocaleDateString('ar-MA');
+      try {
+        const res = await callBackend('getInitialDashboardData');
+        let h = ''; 
+        res.report.forEach(r => {
+          let amBadge = r[8].includes('لم يسجل') ? 'badge-red' : (r[8].includes('سجل') ? 'badge-green' : '');
+          let pmBadge = r[13].includes('لم يسجل') ? 'badge-red' : (r[13] !== '' ? 'badge-green' : '');
+          let commitClass = r[9].includes('متاخر') ? 'text-orange fw-bold' : (r[9].includes('غائب') ? 'text-danger fw-bold' : (r[9].includes('حاضر') ? 'text-primary fw-bold' : 'text-dark'));
+          
+          h += `<tr><td class="text-muted fw-bold">${r[0]}</td><td class="fw-bold">${r[1]}</td><td>${r[4]}</td><td class="fw-bold">${r[7]}</td><td><span class="${amBadge}">${r[8]}</span></td><td class="${commitClass}">${r[9] || '0'}</td><td class="fw-bold">${r[12]}</td><td><span class="${pmBadge}">${r[13]}</span></td></tr>`;
+        });
+        document.getElementById('report-rows').innerHTML = h;
+
+        if(myChart) myChart.destroy();
+        
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        myChart = new Chart(ctx, { 
+          type: 'bar', 
+          data: { 
+            labels: res.chartLabels, 
+            datasets: [{ 
+              label: 'النسبة', 
+              data: res.chartValues, 
+              backgroundColor: 'rgba(37, 99, 235, 0.9)', 
+              hoverBackgroundColor: 'rgba(29, 78, 216, 1)',
+              borderRadius: 6,
+              barThickness: 32,
+            }] 
+          }, 
+          options: { 
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false },
+                tooltip: { 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    titleFont: { family: 'Cairo', size: 13 }, 
+                    bodyFont: { family: 'Cairo', size: 13 }, 
+                    padding: 12, 
+                    cornerRadius: 8 
+                }
+            },
+            scales: { 
+              y: { 
+                  max: 1, 
+                  grid: { color: '#e2e8f0', borderDash: [5, 5], drawBorder: false },
+                  ticks: { font: { family: 'Cairo' }, color: '#64748b' }
+              },
+              x: {
+                  grid: { display: false, drawBorder: false },
+                  ticks: { font: { family: 'Cairo', size: 12 }, color: '#475569' }
+              }
+            } 
+          } 
+        });
+
+        document.getElementById('msg-count').innerText = res.msgCount;
+        let mH = ''; res.messages.forEach(m => { mH += `<tr><td class="fw-bold">${m.name}</td><td class="text-muted">${m.text}</td><td class="fw-bold text-success"><i class="bi bi-check-all"></i> ${m.status}</td></tr>`; });
+        document.getElementById('msg-rows').innerHTML = mH || '<tr><td colspan="3" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-4 d-block mb-2"></i>لا رسائل واردة</td></tr>';
+
+        let jH = ''; res.justifications.forEach(j => { jH += `<tr><td>${j[0]}</td><td class="fw-bold text-muted">${j[1]}</td><td class="fw-bold">${j[2]}</td><td><span class="badge bg-light text-dark border">${j[3]}</span></td><td>${j[4]}</td></tr>`; });
+        document.getElementById('just-rows').innerHTML = jH || '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-4 d-block mb-2"></i>لا يوجد تبريرات.</td></tr>';
+
+        let vH = '';
+        if (res.visitors && res.visitors.length > 0) {
+          res.visitors.forEach(v => {
+            let d = v.date || v[0] || '';
+            let n = v.name || v[1] || '';
+            let l = v.level || v[2] || '';
+            let s = v.subject || v[3] || '';
+            let h = v.hours || v[4] || '';
+            let t = v.monthTotal || v[5] || h;
+            vH += `<tr>
+              <td class="text-muted">${d}</td>
+              <td class="fw-bold">${n}</td>
+              <td><span class="badge bg-light text-dark border">${l}</span></td>
+              <td>${s}</td>
+              <td class="fw-bold text-primary">${h} س</td>
+              <td class="fw-bold text-success">${t} س</td>
+            </tr>`;
+          });
+        }
+        document.getElementById('visit-rows').innerHTML = vH || '<tr><td colspan="6" class="text-center text-muted py-4 fw-bold"><i class="bi bi-person-x fs-3 d-block mb-2 opacity-50"></i>لا توجد سجلات للأساتذة الزائرين.</td></tr>';
+
+        let mvH = '';
+        if (res.movements && res.movements.length > 0) {
+          res.movements.forEach(m => {
+            let d = m.date || m[0] || '';
+            let s = m.sup || m[1] || '';
+            let t = m.teacher || m[2] || '';
+            let r = m.reason || m[3] || '';
+            mvH += `<tr>
+              <td class="text-muted small">${d}</td>
+              <td class="fw-bold text-secondary">${s}</td>
+              <td class="fw-bold text-primary">${t}</td>
+              <td>${r}</td>
+            </tr>`;
+          });
+        }
+        document.getElementById('moves-rows').innerHTML = mvH || '<tr><td colspan="4" class="text-center text-muted py-4 fw-bold"><i class="bi bi-clock-history fs-3 d-block mb-2 opacity-50"></i>لا توجد سجلات للتحركات حالياً.</td></tr>';
+
+        allCats = res.cats; catTimes = res.configTimes;
+        let cOpts = res.cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById('st-cat').innerHTML = cOpts; 
+        document.getElementById('ed-cat-sel').innerHTML = cOpts;
+        fillCatTimes();
+      } catch(e) { console.error(e); }
+    }
+
+    async function findAndEdit() { 
+      let id = document.getElementById('edit-id-find').value; 
+      try {
+        const emp = await callBackend('getEmployeeDetails', { id: id });
+        if(emp) { 
+          document.getElementById('st-id').value = id; 
+          document.getElementById('st-name').value = emp.name; 
+          document.getElementById('st-phone').value = emp.phone; 
+          document.getElementById('st-cat').value = emp.cat; 
+          alert("تم الجلب بنجاح."); 
+        } else {
+          alert("الموظف غير موجود."); 
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function addStaff() { 
+      try {
+        const m = await callBackend('saveNewStaff', {
+          id: document.getElementById('st-id').value,
+          name: document.getElementById('st-name').value,
+          phone: document.getElementById('st-phone').value,
+          cat: document.getElementById('st-cat').value
+        });
+        alert(m); 
+        loadData(); 
+      } catch(e) { console.error(e); }
+    }
+
+    async function delStaff() { 
+      if(confirm("تأكيد حذف الموظف؟")) {
+        try {
+          const m = await callBackend('removeStaff', { id: document.getElementById('edit-id-find').value });
+          alert(m); 
+          loadData(); 
+        } catch(e) { console.error(e); }
+      }
+    }
+    
+    async function loadBulkEdit() { 
+      try {
+        const res = await callBackend('getAllStaff');
+        document.getElementById('bulk-box').classList.remove('d-none'); 
+        let h = ''; 
+        res.forEach(e => { 
+          let cO = allCats.map(c => `<option value="${c}" ${c===e.cat?'selected':''}>${c}</option>`).join(''); 
+          h += `<tr class="b-r" data-id="${e.id}"><td class="align-middle fw-bold ps-3">${e.id}</td><td><input class="form-control b-n" value="${e.name}"></td><td><input class="form-control b-p" value="${e.phone}"></td><td><select class="form-select b-c">${cO}</select></td></tr>`; 
+        }); 
+        document.getElementById('bulk-rows').innerHTML = h; 
+      } catch(e) { console.error(e); }
+    }
+    
+    async function saveBulk() { 
+      let data = []; 
+      document.querySelectorAll('.b-r').forEach(r => data.push({ 
+        id: r.dataset.id, 
+        name: r.querySelector('.b-n').value, 
+        phone: r.querySelector('.b-p').value, 
+        cat: r.querySelector('.b-c').value 
+      })); 
+      try {
+        const m = await callBackend('saveBulkStaff', { staffData: data });
+        alert(m); 
+        loadData(); 
+      } catch(e) { console.error(e); }
+    }
+    
+    function toggleNewCatMode() { isNewCat = !isNewCat; document.getElementById('ed-cat-sel').classList.toggle('d-none'); document.getElementById('new-cat-name').classList.toggle('d-none'); }
+    function toggleS() { document.getElementById('t-s').disabled = !document.getElementById('has-s').checked; }
+    
+    function fillCatTimes() { let d = catTimes.find(r => r[0] === document.getElementById('ed-cat-sel').value); if(d) { document.getElementById('t-w').value = d[1]; document.getElementById('has-s').checked = !!d[2]; toggleS(); if(d[2]) document.getElementById('t-s').value = d[2]; } }
+    
+    async function saveCat() { 
+      let n = isNewCat ? document.getElementById('new-cat-name').value : document.getElementById('ed-cat-sel').value; 
+      try {
+        const m = await callBackend('updateConfigTime', {
+          name: n,
+          workTime: document.getElementById('t-w').value,
+          saturdayTime: document.getElementById('has-s').checked ? document.getElementById('t-s').value : ""
+        });
+        alert(m); 
+        isNewCat = false; 
+        loadData(); 
+      } catch(e) { console.error(e); }
+    }
+    
+    async function delCat() { 
+      if(confirm("تأكيد حذف الفئة؟")) {
+        try {
+          const m = await callBackend('deleteConfigCategory', { category: document.getElementById('ed-cat-sel').value });
+          alert(m); 
+          loadData(); 
+        } catch(e) { console.error(e); }
+      }
+    }
+
+    async function renameCat() { 
+      let n = prompt("الاسم الجديد للفئة:"); 
+      if(n) {
+        try {
+          const m = await callBackend('renameConfigCategory', { 
+            oldName: document.getElementById('ed-cat-sel').value, 
+            newName: n 
+          });
+          alert(m); 
+          loadData(); 
+        } catch(e) { console.error(e); }
+      }
+    }
+    
+    function showSec(s) { 
+      document.querySelectorAll('section').forEach(el => el.classList.add('d-none')); 
+      document.getElementById(s + '-sec').classList.remove('d-none'); 
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); 
+      
+      if (window.event && window.event.target) {
+        let link = window.event.target.closest('.nav-link');
+        if (link) link.classList.add('active');
+      }
+      
+      if(window.innerWidth <= 768) toggleMenu(); 
+    }
+    
+    async function fetchArchive() { 
+      let dateVal = document.getElementById('arc-date').value;
+      if(!dateVal) { alert("الرجاء تحديد التاريخ أولاً"); return; }
+      
+      document.getElementById('arc-rows').innerHTML = '<tr><td colspan="8" class="text-center text-primary py-5 fw-bold fs-5"><div class="spinner-border spinner-border-sm me-2"></div> جاري جلب البيانات...</td></tr>';
+
+      try {
+        const res = await callBackend('getArchiveDataByDate', { date: dateVal });
+        if(!res.success) {
+          document.getElementById('arc-rows').innerHTML = `<tr><td colspan="8" class="text-center text-danger py-5 fw-bold"><i class="bi bi-exclamation-triangle fs-3 d-block mb-2"></i>${res.message}</td></tr>`;
+          return;
+        }
+
+        let h = ''; 
+        res.data.forEach(r => { 
+          let amBadge = r[8].includes('لم يسجل') ? 'badge-red' : (r[8].includes('سجل') ? 'badge-green' : '');
+          let pmBadge = r[13].includes('لم يسجل') ? 'badge-red' : (r[13] !== '' ? 'badge-green' : '');
+          
+          let commitText = r[9] ? r[9] : (r[10] > 0 ? r[10] + ' دقيقة تأخير' : '0');
+          let commitClass = commitText.includes('تاخر') || r[10] > 0 ? 'text-orange' : (commitText.includes('غائب') ? 'text-danger' : 'text-primary');
+          
+          h += `<tr>
+            <td class="text-muted fw-bold">${r[0]}</td>
+            <td class="fw-bold">${r[1]}</td>
+            <td>${r[4]}</td>
+            <td class="fw-bold">${r[7]}</td>
+            <td><span class="${amBadge}">${r[8]}</span></td>
+            <td class="fw-bold ${commitClass}">${commitText}</td>
+            <td class="fw-bold">${r[12]}</td>
+            <td><span class="${pmBadge}">${r[13]}</span></td>
+          </tr>`; 
+        }); 
+        document.getElementById('arc-rows').innerHTML = h || '<tr><td colspan="8" class="text-center py-5 text-muted fw-bold"><i class="bi bi-folder-x fs-3 d-block mb-2 opacity-50"></i>لا توجد بيانات لهذا التاريخ.</td></tr>'; 
+      } catch(e) { console.error(e); }
+    }
+  </script>
+</body>
+</html>

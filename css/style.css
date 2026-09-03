@@ -1,0 +1,270 @@
+/* ==========================================
+   المتغيرات والتنسيقات الأساسية
+   ========================================== */
+:root {
+  --main-color: #d97706;
+  --main-hover: #b45309;
+  --bg-color: #f8fafc;
+  --sidebar-bg: #1e293b;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --primary-color: #2563eb;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: 'Cairo', sans-serif;
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+/* ==========================================
+   شاشة تسجيل الدخول
+   ========================================== */
+#login-page {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px 30px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-card input {
+  border-radius: 12px;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.login-card input:focus {
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.15);
+  border-color: var(--main-color);
+  background: #ffffff;
+  outline: none;
+}
+
+/* ==========================================
+   القائمة الجانبية (Sidebar)
+   ========================================== */
+.sidebar {
+  background: var(--sidebar-bg);
+  color: #ffffff;
+  width: 270px;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  padding: 30px 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-logo {
+  font-weight: 800;
+  color: #f59e0b;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.nav-link {
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-link i {
+  font-size: 1.25rem;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  transform: translateX(-4px);
+}
+
+.nav-link.active {
+  background: var(--main-color);
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(217, 119, 6, 0.3);
+}
+
+/* ==========================================
+   منطقة المحتوى والبطاقات
+   ========================================== */
+.content {
+  margin-right: 270px;
+  padding: 30px;
+  transition: margin-right 0.3s ease;
+}
+
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+  background: var(--card-bg);
+  transition: all 0.3s ease;
+}
+
+.card-title-custom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+}
+
+/* ==========================================
+   عناصر النماذج والأزرار
+   ========================================== */
+.form-control, .form-select {
+  border-radius: 10px;
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  background-color: #f8fafc;
+  font-weight: 600;
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+  border-color: var(--main-color);
+  background-color: #ffffff;
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 700;
+  padding: 10px 18px;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================
+   الجداول
+   ========================================== */
+.table-responsive {
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead {
+  background: #f1f5f9;
+}
+
+.table th {
+  color: #475569;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-color);
+  padding: 14px 16px;
+  font-size: 0.9rem;
+}
+
+.table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.95rem;
+}
+
+/* ==========================================
+   الزر العائم وزر القائمة للهواتف
+   ========================================== */
+.floating-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--success-color);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+  font-size: 24px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.floating-btn:hover {
+  transform: scale(1.1) rotate(180deg);
+  background: #059669;
+}
+
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+  background: var(--main-color);
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================
+   التجاوب مع الشاشات الصغيرة (Mobile Responsive)
+   ========================================== */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(100%);
+    width: 260px;
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  .content {
+    margin-right: 0;
+    padding: 15px;
+    padding-top: 75px;
+  }
+  
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
