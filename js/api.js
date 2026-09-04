@@ -14,6 +14,8 @@ async function apiCall(action, data = {}) {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
+      // ⚠️ التعديل الجوهري هنا: إجبار المتصفح على تتبع إعادة توجيه سيرفرات جوجل
+      redirect: "follow", 
       body: JSON.stringify({ action: action, data: data })
     });
 
@@ -51,7 +53,9 @@ const SupervisorAPI = {
 const AdminAPI = {
   login: (username, password) => apiCall('checkAdminLogin', { username, password }),
   getOverviewStats: () => apiCall('getAdminOverviewStats'),
-  getReports: (filters) => apiCall('getAdminReports', filters)
+  getReports: (filters) => apiCall('getAdminReports', filters),
+  // تمت إضافة هذه الدالة لربطها بصفحة "البحث في الأرشيف اليومي"
+  getArchiveByDate: (dateString) => apiCall('getArchiveDataByDate', { date: dateString })
 };
 
 // ==========================================
