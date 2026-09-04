@@ -1,18 +1,18 @@
 // ==========================================
-// إعدادات API الموحدة للنظام
+// إعدادات API الموحدة للنظام (Client-Side Wrapper)
 // ==========================================
 const API_URL = "https://script.google.com/macros/s/AKfycbxa_DUAJ-zkz-QgxHsldd-mr-MGu1BBFX3slDhDSpYXmoIvwfoikO9bQAhNgnhBXbpz/exec";
 
 /**
  * دالة مركزية لإرسال جميع الطلبات إلى Google Apps Script Web App
  */
-async function apiCall(action, data = {}) {
+async function apiCall(action, payload = {}) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       redirect: "follow", 
-      body: JSON.stringify({ action: action, data: data })
+      body: JSON.stringify({ action: action, payload: payload })
     });
 
     if (!response.ok) {
@@ -20,6 +20,9 @@ async function apiCall(action, data = {}) {
     }
 
     const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.message || "حدث خطأ في استجابة الخادم");
+    }
     return result;
   } catch (error) {
     console.error(`[API Error - ${action}]:`, error);
@@ -31,34 +34,40 @@ async function apiCall(action, data = {}) {
 // 1. خدمات بوابة الحراسة العامة (Supervisor)
 // ==========================================
 const SupervisorAPI = {
-  login: (su, sp) => apiCall('checkSupervisorLogin', { su, sp }),
+  login: (u, p) => apiCall('checkSupervisorLogin', { u, p }),
   getDashboardData: () => apiCall('getSupervisorDashboardData'),
-  saveMovement: (sup, teacher, reason) => apiCall('saveMovement', { sup, t: teacher, r: reason }),
-  deleteMovement: (row) => apiCall('deleteMovement', { r: row }),
+  saveMovement: (s, t, r) => apiCall('saveMovement', { s, t, r }),
+  deleteMovement: (row) => apiCall('deleteMovement', { row }),
   saveVisitor: (d, n, l, s, h) => apiCall('saveVisitor', { d, n, l, s, h }),
   updateVisitor: (row, d, n, l, s, h) => apiCall('updateVisitor', { row, d, n, l, s, h }),
-  deleteVisitor: (row) => apiCall('deleteVisitor', { r: row }),
-  addSetting: (type, val) => apiCall('addVisitorSetting', { type, val }),
-  deleteSetting: (type, val) => apiCall('deleteVisitorSetting', { type, val })
+  deleteVisitor: (row) => apiCall('deleteVisitor', { row })
 };
 
 // ==========================================
-// 2. خدمات بوابة المدير والأرشيف (Admin / Index)
+// 2. خدمات بوابة المدير والإدارة (Admin)
 // ==========================================
 const AdminAPI = {
-  login: (username, password) => apiCall('checkAdminLogin', { username, password }),
-  getOverviewStats: () => apiCall('getAdminOverviewStats'),
-  getReports: (filters) => apiCall('getAdminReports', filters),
-  getArchiveByDate: (dateString) => apiCall('getArchiveDataByDate', { date: dateString })
+  login: (u, p) => apiCall('login', { u, p }),
+  getOverviewStats: () => apiCall('getInitialDashboardData'),
+  getArchiveByDate: (dateString) => apiCall('getArchiveDataByDate', { dateString }),
+  
+  // إدارة الموظفين والفئات
+  getEmployeeDetails: (id) => apiCall('getEmployeeDetails', { id }),
+  saveNewStaff: (id, name, phone, cat) => apiCall('saveNewStaff', { id, name, phone, cat }),
+  removeStaff: (id) => apiCall('removeStaff', { id }),
+  getAllStaff: () => apiCall('getAllStaff'),
+  saveBulkStaff: (arr) => apiCall('saveBulkStaff', { arr }),
+  
+  updateConfigTime: (c, w, s) => apiCall('updateConfigTime', { c, w, s }),
+  deleteConfigCategory: (n) => apiCall('deleteConfigCategory', { n }),
+  renameConfigCategory: (o, n) => apiCall('renameConfigCategory', { o, n })
 };
 
 // ==========================================
 // 3. خدمات بوابة الموظفين والتبريرات (Employee)
 // ==========================================
 const EmployeeAPI = {
-  login: (empId, password) => apiCall('checkEmployeeLogin', { empId, password }),
-  submitJustification: (payload) => apiCall('submitEmployeeJustification', payload),
-  getAttendanceHistory: (empId) => apiCall('getEmployeeAttendanceHistory', { empId })
+  submitJustification: (id, name, type, reason) => apiCall('saveJustification', { id, name, type, reason })
 };
 
 // ==========================================
@@ -66,16 +75,15 @@ const EmployeeAPI = {
 // ==========================================
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // 1. إذا كنا في صفحة الأرشيف، نجلب بيانات تاريخ اليوم أوتوماتيكياً
+    // 1. جلب تلقائي لبيانات الأرشيف في حال وجود حقل التاريخ
     const archiveDateInput = document.querySelector('input[type="date"]') || document.getElementById('archiveDate');
     if (archiveDateInput) {
       let selectedDate = archiveDateInput.value;
       if (!selectedDate) {
         const today = new Date();
-        selectedDate = today.toLocaleDateString('en-GB'); // dd/mm/yyyy
+        selectedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
       }
       
-      // استدعاء جلب بيانات الأرشيف تلقائياً
       if (typeof autoLoadArchive === "function") {
         autoLoadArchive(selectedDate);
       } else {
@@ -86,11 +94,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
     
-    // 2. إذا كنا في الصفحة الرئيسية (لوحة التحكم)، نجلب التقرير الشامل أوتوماتيكياً
+    // 2. جلب تلقائي للوحة التحكم الرئيسية
     if (typeof loadDashboardData === "function") {
       loadDashboardData();
     }
   } catch (err) {
-    console.log("Auto-load initialized:", err);
+    console.warn("Auto-load initialized notice:", err);
   }
 });
