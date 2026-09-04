@@ -5,16 +5,12 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxa_DUAJ-zkz-QgxHsldd-m
 
 /**
  * دالة مركزية لإرسال جميع الطلبات إلى Google Apps Script Web App
- * @param {string} action - اسم الإجراء المطلوب في الخادم
- * @param {object} data - البيانات المراد إرسالها
- * @returns {Promise<object>} - النتيجة القادمة من الخادم
  */
 async function apiCall(action, data = {}) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      // ⚠️ التعديل الجوهري هنا: إجبار المتصفح على تتبع إعادة توجيه سيرفرات جوجل
       redirect: "follow", 
       body: JSON.stringify({ action: action, data: data })
     });
@@ -27,7 +23,6 @@ async function apiCall(action, data = {}) {
     return result;
   } catch (error) {
     console.error(`[API Error - ${action}]:`, error);
-    alert("تعذر الاتصال بالخادم، يرجى التأكد من جودة اتصال الإنترنت والتجربة مجدداً.");
     throw error;
   }
 }
@@ -48,13 +43,12 @@ const SupervisorAPI = {
 };
 
 // ==========================================
-// 2. خدمات بوابة المدير (Admin / Index)
+// 2. خدمات بوابة المدير والأرشيف (Admin / Index)
 // ==========================================
 const AdminAPI = {
   login: (username, password) => apiCall('checkAdminLogin', { username, password }),
   getOverviewStats: () => apiCall('getAdminOverviewStats'),
   getReports: (filters) => apiCall('getAdminReports', filters),
-  // تمت إضافة هذه الدالة لربطها بصفحة "البحث في الأرشيف اليومي"
   getArchiveByDate: (dateString) => apiCall('getArchiveDataByDate', { date: dateString })
 };
 
@@ -66,3 +60,37 @@ const EmployeeAPI = {
   submitJustification: (payload) => apiCall('submitEmployeeJustification', payload),
   getAttendanceHistory: (empId) => apiCall('getEmployeeAttendanceHistory', { empId })
 };
+
+// ==========================================
+// 🔥 الجلب الأوتوماتيكي عند تحميل الصفحة فوراً
+// ==========================================
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // 1. إذا كنا في صفحة الأرشيف، نجلب بيانات تاريخ اليوم أوتوماتيكياً
+    const archiveDateInput = document.querySelector('input[type="date"]') || document.getElementById('archiveDate');
+    if (archiveDateInput) {
+      let selectedDate = archiveDateInput.value;
+      if (!selectedDate) {
+        const today = new Date();
+        selectedDate = today.toLocaleDateString('en-GB'); // dd/mm/yyyy
+      }
+      
+      // استدعاء جلب بيانات الأرشيف تلقائياً
+      if (typeof autoLoadArchive === "function") {
+        autoLoadArchive(selectedDate);
+      } else {
+        const res = await AdminAPI.getArchiveByDate(selectedDate);
+        if (res && res.data && typeof renderTableData === "function") {
+          renderTableData(res.data);
+        }
+      }
+    }
+    
+    // 2. إذا كنا في الصفحة الرئيسية (لوحة التحكم)، نجلب التقرير الشامل أوتوماتيكياً
+    if (typeof loadDashboardData === "function") {
+      loadDashboardData();
+    }
+  } catch (err) {
+    console.log("Auto-load initialized:", err);
+  }
+});
