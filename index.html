@@ -1,20 +1,14 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بوابة الموارد البشرية - مؤسسة الجيل الثالث</title>
   
-  <!-- خط Cairo -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- إطار Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <!-- مكتبة الأيقونات (Bootstrap Icons) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   
-  <!-- ملف التنسيقات الموحد -->
-  <link rel="stylesheet" href="css/style.css">
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
@@ -35,7 +29,6 @@
       color: var(--text-main);
     }
 
-    /* صفحة الدخول */
     #login-page { 
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
       position: fixed; inset: 0; z-index: 9999; display: flex; 
@@ -53,7 +46,6 @@
     }
     .login-card input:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: var(--primary-color); background: #fff; }
 
-    /* القائمة الجانبية */
     .sidebar { 
       background: var(--sidebar-bg); 
       width: 280px; height: 100vh; position: fixed; right: 0; top: 0; 
@@ -73,7 +65,6 @@
     .nav-link.active { background: var(--primary-color); color: white; box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2); }
     .nav-link.active i { color: white; }
 
-    /* البطاقات والمحتوى */
     .content { margin-right: 280px; padding: 30px; transition: 0.3s; }
     .card { 
       border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; 
@@ -83,7 +74,6 @@
     .card-header-modern { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
     .card-header-modern i { font-size: 1.5rem; color: var(--primary-color); }
     
-    /* الجداول */
     .table-responsive { border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
     .table { margin-bottom: 0; }
     .table thead { background: #f8fafc; }
@@ -91,12 +81,10 @@
     .table td { padding: 16px; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
     .table-hover tbody tr:hover { background-color: #f8fafc; }
 
-    /* الحالات (Badges) */
     .badge-green { background-color: #10b981; color: white; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; }
     .badge-red { background-color: #ef4444; color: white; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; }
     .text-orange { color: #f59e0b !important; }
 
-    /* الأزرار والمدخلات */
     .btn { border-radius: 10px; font-weight: 700; padding: 10px 20px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     .form-control, .form-select { border-radius: 10px; padding: 10px 15px; border: 1px solid var(--border-color); background-color: #f8fafc; font-weight: 600;}
     .form-control:focus, .form-select:focus { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); border-color: var(--primary-color); background-color: #fff;}
@@ -112,12 +100,10 @@
 
     .menu-btn { display: none; position: fixed; top: 15px; right: 15px; z-index: 1001; background: var(--primary-color); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* تصميم بطاقة الواتساب */
     .whatsapp-card { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border: 1px solid #bbf7d0; cursor: pointer; }
     .whatsapp-card:hover { box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.15); transform: translateY(-2px); }
     .icon-wrapper { width: 70px; height: 70px; border-radius: 20px; background: #dcfce7; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #16a34a; font-size: 2rem; }
 
-    /* حاوية المبيان المضبوطة */
     .chart-wrapper {
       position: relative;
       height: 300px;
@@ -137,10 +123,9 @@
   <button class="menu-btn" onclick="toggleMenu()"><i class="bi bi-list"></i> القائمة</button>
   <button class="floating-btn" onclick="loadData()" title="تحديث البيانات"><i class="bi bi-arrow-repeat"></i></button>
 
-  <!-- صفحة تسجيل الدخول -->
   <div id="login-page">
     <div class="login-card text-center">
-      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhMUJtfA_Xg8F__XYlgd2Z8C6FXlj_iFfS6oESl7nNX-fN6rPG9o0vbtQdtkADbwJ1tkkgMxt4C5RoEEGxvUfGr0D1XJmZT3LlBQ4ejM8dE2D1JZcny6m7AKLVZ-5EI6rsWipFJ4LaR8V7G703Fpf82nnu3zhghI8Pms6FcEWPHHRVRVxYvQeafLLs9jkIw=s484" style="max-width: 150px;" class="mx-auto mb-4" alt="شعار المؤسسة">
+      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhMUJtfA_Xg8F__XYlgd2Z8C6FXlj_iFfS6oESl7nNX-fN6rPG9o0vbtQdtkADbwJ1tkkgMxt4C5RoEEGxvUfGr0D1XJmZT3LlBQ4ejM8dE2D1JZcny6m7AKLVZ-5EI6rsWipFJ4LaR8V7G703Fpf82nnu3zhghI8Pms6FcEWPHHRVRVxYvQeafLLs9jkIw=s484" style="max-width: 150px;" class="mx-auto mb-4">
       <h5 class="fw-bold mb-4" style="color: #1e293b;">بوابة الموارد البشرية</h5>
       <form onsubmit="event.preventDefault(); doLogin();">
         <div class="position-relative mb-3">
@@ -155,10 +140,8 @@
     </div>
   </div>
 
-  <!-- التطبيق الرئيسي -->
   <div id="main-app" class="d-none">
     
-    <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
       <h5 class="text-center mb-4 pb-3 sidebar-logo-text"><i class="bi bi-buildings-fill ms-2"></i> مؤسسة الجيل الثالث</h5>
       <nav class="nav flex-column mt-2">
@@ -170,10 +153,8 @@
       </nav>
     </div>
 
-    <!-- المحتوى -->
     <div class="content">
       
-      <!-- قسم التقرير الميداني -->
       <section id="report-sec">
         <div class="row">
           <div class="col-lg-12">
@@ -215,7 +196,6 @@
         </div>
       </section>
 
-      <!-- قسم الأرشيف -->
       <section id="archive-sec" class="d-none">
         <div class="card p-4">
           <div class="card-header-modern">
@@ -244,7 +224,6 @@
         </div>
       </section>
 
-      <!-- قسم الزوار والتحركات -->
       <section id="visit-sec" class="d-none">
         <div class="card p-4 mb-4">
           <div class="card-header-modern">
@@ -303,7 +282,6 @@
         </div>
       </section>
 
-      <!-- قسم صندوق التبريرات -->
       <section id="just-sec" class="d-none">
         <div class="card p-4">
           <div class="card-header-modern">
@@ -319,7 +297,6 @@
         </div>
       </section>
 
-      <!-- قسم الإدارة الشاملة -->
       <section id="admin-sec" class="d-none">
         <div class="card p-4 mb-4">
           <div class="card-header-modern">
@@ -376,7 +353,6 @@
           </div>
         </div>
 
-        <!-- قسم ضبط أوقات الفئات -->
         <div class="card p-4">
           <div class="card-header-modern text-secondary">
             <i class="bi bi-hourglass-split"></i>
@@ -424,7 +400,6 @@
     </div>
   </div>
 
-  <!-- نافذة رسائل الواتساب المنبثقة -->
   <div class="modal fade" id="msgModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -444,39 +419,61 @@
     </div>
   </div>
 
-  <!-- ربط ملف البرمجة الموحد -->
-  <script src="js/api.js"></script>
-
-  <!-- السكريبت التفاعلي للبوابة -->
   <script>
+    // ⚠️ استبدل هذا الرابط برابط الـ Web App الخاص بك المنشور من Apps Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbxa_DUAJ-zkz-QgxHsldd-mr-MGu1BBFX3slDhDSpYXmoIvwfoikO9bQAhNgnhBXbpz/exec";
+
+    /**
+     * دالة الجسر المركزية لإرسال واستقبال البيانات من الـ API
+     */
+    async function apiCall(action, payload = {}) {
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          redirect: "follow",
+          body: JSON.stringify({ action: action, payload: payload })
+        });
+        
+        if (!response.ok) throw new Error(`خطأ في الشبكة: ${response.status}`);
+        
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.message || "حدث خطأ غير معروف في الخادم");
+        }
+        return result.data;
+      } catch (err) {
+        console.error(`[API Error - ${action}]:`, err);
+        throw err;
+      }
+    }
+
     let myChart; let allCats = []; let catTimes = []; let isNewCat = false;
     
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-
-    // استخدام دالة apiCall الموحدة والموجودة داخل js/api.js
-    async function callBackend(action, data = {}) {
-      return await apiCall(action, data);
-    }
     
     async function doLogin() { 
       const u = document.getElementById('u').value;
       const p = document.getElementById('p').value;
       try {
-        const res = await callBackend('login', { u: u, p: p });
-        if(res && res.success) { 
+        const res = await apiCall('login', { u, p });
+        if (res && res.success) { 
           document.getElementById('login-page').classList.add('d-none'); 
           document.getElementById('main-app').classList.remove('d-none'); 
           loadData(); 
         } else {
-          alert("بيانات خاطئة!"); 
+          document.getElementById('err').innerText = "بيانات خاطئة!";
         }
-      } catch(e) { console.error(e); }
+      } catch (err) {
+        document.getElementById('err').innerText = "فشل الاتصال بالخادم!";
+      }
     }
     
     async function loadData() {
       document.getElementById('today-date').innerText = new Date().toLocaleDateString('ar-MA');
       try {
-        const res = await callBackend('getInitialDashboardData');
+        const res = await apiCall('getInitialDashboardData');
+        
         let h = ''; 
         res.report.forEach(r => {
           let amBadge = r[8].includes('لم يسجل') ? 'badge-red' : (r[8].includes('سجل') ? 'badge-green' : '');
@@ -577,54 +574,51 @@
 
         allCats = res.cats; catTimes = res.configTimes;
         let cOpts = res.cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById('st-cat').innerHTML = cOpts; 
-        document.getElementById('ed-cat-sel').innerHTML = cOpts;
+        document.getElementById('st-cat').innerHTML = cOpts; document.getElementById('ed-cat-sel').innerHTML = cOpts;
         fillCatTimes();
-      } catch(e) { console.error(e); }
+      } catch(err) {
+        alert("خطأ أثناء تحميل البيانات: " + err.message);
+      }
     }
 
     async function findAndEdit() { 
       let id = document.getElementById('edit-id-find').value; 
       try {
-        const emp = await callBackend('getEmployeeDetails', { id: id });
+        const emp = await apiCall('getEmployeeDetails', { id });
         if(emp) { 
           document.getElementById('st-id').value = id; 
           document.getElementById('st-name').value = emp.name; 
           document.getElementById('st-phone').value = emp.phone; 
           document.getElementById('st-cat').value = emp.cat; 
           alert("تم الجلب بنجاح."); 
-        } else {
-          alert("الموظف غير موجود."); 
-        }
-      } catch(e) { console.error(e); }
+        } else alert("الموظف غير موجود."); 
+      } catch(e) { alert(e.message); }
     }
 
     async function addStaff() { 
       try {
-        const m = await callBackend('saveNewStaff', {
+        const m = await apiCall('saveNewStaff', {
           id: document.getElementById('st-id').value,
           name: document.getElementById('st-name').value,
           phone: document.getElementById('st-phone').value,
           cat: document.getElementById('st-cat').value
         });
-        alert(m); 
-        loadData(); 
-      } catch(e) { console.error(e); }
+        alert(m); loadData(); 
+      } catch(e) { alert(e.message); }
     }
 
     async function delStaff() { 
       if(confirm("تأكيد حذف الموظف؟")) {
         try {
-          const m = await callBackend('removeStaff', { id: document.getElementById('edit-id-find').value });
-          alert(m); 
-          loadData(); 
-        } catch(e) { console.error(e); }
+          const m = await apiCall('removeStaff', { id: document.getElementById('edit-id-find').value });
+          alert(m); loadData(); 
+        } catch(e) { alert(e.message); }
       }
     }
     
     async function loadBulkEdit() { 
       try {
-        const res = await callBackend('getAllStaff');
+        const res = await apiCall('getAllStaff');
         document.getElementById('bulk-box').classList.remove('d-none'); 
         let h = ''; 
         res.forEach(e => { 
@@ -632,22 +626,16 @@
           h += `<tr class="b-r" data-id="${e.id}"><td class="align-middle fw-bold ps-3">${e.id}</td><td><input class="form-control b-n" value="${e.name}"></td><td><input class="form-control b-p" value="${e.phone}"></td><td><select class="form-select b-c">${cO}</select></td></tr>`; 
         }); 
         document.getElementById('bulk-rows').innerHTML = h; 
-      } catch(e) { console.error(e); }
+      } catch(e) { alert(e.message); }
     }
     
     async function saveBulk() { 
       let data = []; 
-      document.querySelectorAll('.b-r').forEach(r => data.push({ 
-        id: r.dataset.id, 
-        name: r.querySelector('.b-n').value, 
-        phone: r.querySelector('.b-p').value, 
-        cat: r.querySelector('.b-c').value 
-      })); 
+      document.querySelectorAll('.b-r').forEach(r => data.push({ id: r.dataset.id, name: r.querySelector('.b-n').value, phone: r.querySelector('.b-p').value, cat: r.querySelector('.b-c').value })); 
       try {
-        const m = await callBackend('saveBulkStaff', { staffData: data });
-        alert(m); 
-        loadData(); 
-      } catch(e) { console.error(e); }
+        const m = await apiCall('saveBulkStaff', { arr: data });
+        alert(m); loadData(); 
+      } catch(e) { alert(e.message); }
     }
     
     function toggleNewCatMode() { isNewCat = !isNewCat; document.getElementById('ed-cat-sel').classList.toggle('d-none'); document.getElementById('new-cat-name').classList.toggle('d-none'); }
@@ -658,24 +646,17 @@
     async function saveCat() { 
       let n = isNewCat ? document.getElementById('new-cat-name').value : document.getElementById('ed-cat-sel').value; 
       try {
-        const m = await callBackend('updateConfigTime', {
-          name: n,
-          workTime: document.getElementById('t-w').value,
-          saturdayTime: document.getElementById('has-s').checked ? document.getElementById('t-s').value : ""
-        });
-        alert(m); 
-        isNewCat = false; 
-        loadData(); 
-      } catch(e) { console.error(e); }
+        const m = await apiCall('updateConfigTime', { c: n, w: document.getElementById('t-w').value, s: document.getElementById('has-s').checked ? document.getElementById('t-s').value : "" });
+        alert(m); isNewCat = false; loadData(); 
+      } catch(e) { alert(e.message); }
     }
     
     async function delCat() { 
       if(confirm("تأكيد حذف الفئة؟")) {
         try {
-          const m = await callBackend('deleteConfigCategory', { category: document.getElementById('ed-cat-sel').value });
-          alert(m); 
-          loadData(); 
-        } catch(e) { console.error(e); }
+          const m = await apiCall('deleteConfigCategory', { n: document.getElementById('ed-cat-sel').value });
+          alert(m); loadData(); 
+        } catch(e) { alert(e.message); }
       }
     }
 
@@ -683,13 +664,9 @@
       let n = prompt("الاسم الجديد للفئة:"); 
       if(n) {
         try {
-          const m = await callBackend('renameConfigCategory', { 
-            oldName: document.getElementById('ed-cat-sel').value, 
-            newName: n 
-          });
-          alert(m); 
-          loadData(); 
-        } catch(e) { console.error(e); }
+          const m = await apiCall('renameConfigCategory', { o: document.getElementById('ed-cat-sel').value, n: n });
+          alert(m); loadData(); 
+        } catch(e) { alert(e.message); }
       }
     }
     
@@ -713,7 +690,8 @@
       document.getElementById('arc-rows').innerHTML = '<tr><td colspan="8" class="text-center text-primary py-5 fw-bold fs-5"><div class="spinner-border spinner-border-sm me-2"></div> جاري جلب البيانات...</td></tr>';
 
       try {
-        const res = await callBackend('getArchiveDataByDate', { date: dateVal });
+        const res = await apiCall('getArchiveDataByDate', { dateVal: dateVal });
+        
         if(!res.success) {
           document.getElementById('arc-rows').innerHTML = `<tr><td colspan="8" class="text-center text-danger py-5 fw-bold"><i class="bi bi-exclamation-triangle fs-3 d-block mb-2"></i>${res.message}</td></tr>`;
           return;
@@ -739,7 +717,9 @@
           </tr>`; 
         }); 
         document.getElementById('arc-rows').innerHTML = h || '<tr><td colspan="8" class="text-center py-5 text-muted fw-bold"><i class="bi bi-folder-x fs-3 d-block mb-2 opacity-50"></i>لا توجد بيانات لهذا التاريخ.</td></tr>'; 
-      } catch(e) { console.error(e); }
+      } catch(err) {
+        document.getElementById('arc-rows').innerHTML = `<tr><td colspan="8" class="text-center text-danger py-5 fw-bold">خطأ في الجلب: ${err.message}</td></tr>`;
+      }
     }
   </script>
 </body>
