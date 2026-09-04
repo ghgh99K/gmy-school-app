@@ -12,32 +12,32 @@
   <!-- مكتبة أيقونات Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   
-  <!-- ملف التنسيقات المخصص -->
-  <link rel="stylesheet" href="css/style.css">
-  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  
+  <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body data-page="supervisor">
 
   <!-- زر فتح القائمة للشاشات الصغيرة -->
-  <button class="menu-btn" onclick="toggleSidebar()"><i class="bi bi-list fs-5"></i> القائمة</button>
+  <button class="menu-btn" id="menu-btn"><i class="bi bi-list fs-5"></i> القائمة</button>
 
   <!-- الزر العائم للتحديث -->
-  <button class="floating-btn" onclick="loadData()" title="تحديث البيانات"><i class="bi bi-arrow-repeat"></i></button>
+  <button class="floating-btn" id="refresh-btn" title="تحديث البيانات"><i class="bi bi-arrow-repeat"></i></button>
 
   <!-- صفحة تسجيل الدخول -->
   <div id="login-page">
     <div class="login-card text-center">
-      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjeojZRXAw4cRaMQwwj7L11hjP4UtD1rUVaIp2PgL4sMBolUofJc2HL87Fk--z79NLAj0_Mtv_067BC5aWgrmrXbtTLBcJ2apuFIbxAzp3RNYhiuxnRtvvvPmwAg3l0dBaunbrF9PT6JgSDI7nbAX627-nbM_6E6V6vwYOTGTxBGZSsLu3Spf3UPH6LCAQ=s379" style="max-width: 120px;" class="mx-auto mb-3" alt="شعار المؤسسة">
-      <h4 class="fw-bold mb-4" style="color: #0f172a;">بوابة الحراسة العامة</h4>
-      <form onsubmit="event.preventDefault(); doSupLogin();">
+      <img src="https://i.ibb.co/W4j7RyBd/INSCRIPTIONS-1.png" class="mx-auto mb-3 logo-120">
+      <h4 class="fw-bold mb-4">بوابة الحراسة العامة</h4>
+      <form id="supervisor-login-form">
         <div class="mb-3 text-start">
-          <input type="text" id="su" autocomplete="username" class="form-control" placeholder="اسم المستخدم" required>
+          <input type="text" id="su" autocomplete="username" class="form-control" placeholder="اسم المستخدم">
         </div>
         <div class="mb-4 text-start">
-          <input type="password" id="sp" autocomplete="current-password" class="form-control" placeholder="كلمة المرور" required>
+          <input type="password" id="sp" autocomplete="current-password" class="form-control" placeholder="كلمة المرور">
         </div>
-        <button type="submit" id="login-btn" class="btn btn-warning w-100 fw-bold py-2 shadow-sm text-white" style="background: var(--main-color); border:none;">
+        <button type="submit" class="btn btn-warning w-100 fw-bold py-2 shadow-sm text-white">
           دخول البوابة <i class="bi bi-box-arrow-in-left ms-1"></i>
         </button>
       </form>
@@ -51,9 +51,9 @@
     <div class="sidebar" id="sidebar">
       <h5 class="text-center mb-4 sidebar-logo"><i class="bi bi-shield-lock-fill me-1"></i> الحراسة العامة</h5>
       <nav class="nav flex-column">
-        <a class="nav-link active" onclick="showSec('move')"><i class="bi bi-person-walking"></i> سجل التحركات</a>
-        <a class="nav-link" onclick="showSec('visit')"><i class="bi bi-person-badge"></i> الأساتذة الزائرون</a>
-        <a class="nav-link" onclick="showSec('set')"><i class="bi bi-sliders"></i> إعدادات القوائم</a>
+        <a class="nav-link active" data-section="move"><i class="bi bi-person-walking"></i> سجل التحركات</a>
+        <a class="nav-link" data-section="visit"><i class="bi bi-person-badge"></i> الأساتذة الزائرون</a>
+        <a class="nav-link" data-section="set"><i class="bi bi-sliders"></i> إعدادات القوائم</a>
       </nav>
     </div>
 
@@ -80,7 +80,7 @@
               <input id="m-r" class="form-control" placeholder="سبب التحرك">
             </div>
             <div class="col-md-2 d-flex align-items-end">
-              <button onclick="saveM()" id="m-btn" class="btn btn-warning text-white w-100 fw-bold" style="background-color: var(--main-color); border:none;">
+              <button id="save-move-btn" class="btn btn-warning text-white w-100 fw-bold">
                 <i class="bi bi-floppy-fill me-1"></i> حفظ السجل
               </button>
             </div>
@@ -131,7 +131,7 @@
               <input type="number" id="v-h" class="form-control" placeholder="0">
             </div>
             <div class="col-md-1 d-flex align-items-end">
-              <button onclick="saveV()" id="v-btn" class="btn btn-success w-100 fw-bold">
+              <button id="save-visit-btn" id="v-btn" class="btn btn-success w-100 fw-bold">
                 <i class="bi bi-floppy-fill"></i> حفظ
               </button>
             </div>
@@ -168,10 +168,10 @@
                 <label class="fw-bold small text-secondary mb-2">أسماء الأساتذة</label>
                 <div class="input-group mb-3">
                   <input id="new-n" class="form-control" placeholder="إضافة اسم جديد...">
-                  <button onclick="addS('name')" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
+                  <button id="add-name-btn" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
                 </div>
                 <select id="li-n" size="6" class="form-select mb-2"></select>
-                <button onclick="delS('name')" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف الاسم المحدد</button>
+                <button id="delete-name-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف الاسم المحدد</button>
               </div>
             </div>
 
@@ -180,10 +180,10 @@
                 <label class="fw-bold small text-secondary mb-2">المواد الدراسية</label>
                 <div class="input-group mb-3">
                   <input id="new-s" class="form-control" placeholder="إضافة مادة جديدة...">
-                  <button onclick="addS('subject')" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
+                  <button id="add-subject-btn" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
                 </div>
                 <select id="li-s" size="6" class="form-select mb-2"></select>
-                <button onclick="delS('subject')" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف المادة المحُددة</button>
+                <button id="delete-subject-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف المادة المحُددة</button>
               </div>
             </div>
           </div>
@@ -193,192 +193,8 @@
     </div>
   </div>
 
-  <!-- ملف API الموحد -->
-  <script src="js/api.js"></script>
-
-  <!-- السكريبت التفاعلي للواجهة -->
-  <script>
-    let editRow = null;
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('active');
-    }
-
-    async function doSupLogin() { 
-      const btn = document.getElementById('login-btn');
-      btn.innerHTML = 'جاري التحقق...';
-      btn.disabled = true;
-
-      const su = document.getElementById('su').value;
-      const sp = document.getElementById('sp').value;
-
-      try {
-        const res = await SupervisorAPI.login(su, sp);
-        if (res && res.success) { 
-          document.getElementById('login-page').classList.add('d-none'); 
-          document.getElementById('main-app').classList.remove('d-none'); 
-          document.getElementById('v-d').valueAsDate = new Date(); 
-          loadData(); 
-        } else {
-          alert("خطأ في البيانات! الرجاء التأكد من اسم المستخدم وكلمة المرور."); 
-          btn.innerHTML = 'دخول البوابة <i class="bi bi-box-arrow-in-left ms-1"></i>';
-          btn.disabled = false;
-        }
-      } catch (error) {
-        btn.innerHTML = 'دخول البوابة <i class="bi bi-box-arrow-in-left ms-1"></i>';
-        btn.disabled = false;
-      }
-    }
-
-    async function loadData() {
-      try {
-        const res = await SupervisorAPI.getDashboardData();
-        const data = res.data || res; 
-
-        const fill = (id, arr, label) => { 
-          document.getElementById(id).innerHTML = `<option value="">-- اختر ${label} --</option>` + arr.map(v => `<option value="${v}">${v}</option>`).join(''); 
-        };
-
-        if (data.settings) {
-          fill('v-n', data.settings.names, 'أستاذ'); 
-          fill('v-s', data.settings.subjects, 'مادة'); 
-          fill('v-l', data.settings.levels, 'سلك');
-          
-          document.getElementById('li-n').innerHTML = data.settings.names.map(v => `<option value="${v}">${v}</option>`).join('');
-          document.getElementById('li-s').innerHTML = data.settings.subjects.map(v => `<option value="${v}">${v}</option>`).join('');
-        }
-        
-        let vH = ''; 
-        if (data.visitors) {
-          data.visitors.forEach(r => {
-            vH += `<tr>
-              <td>${r.date}</td>
-              <td class="fw-bold text-primary">${r.name}</td>
-              <td><span class="badge bg-light text-dark border">${r.level}</span></td>
-              <td>${r.subject}</td>
-              <td class="fw-bold">${r.hours}</td>
-              <td class="fw-bold text-success">${r.monthTotal}</td>
-              <td>
-                <button onclick="trigEdit(${r.row},'${r.date}','${r.name}','${r.level}','${r.subject}',${r.hours})" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
-                <button onclick="delV(${r.row})" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash-fill"></i></button>
-              </td>
-            </tr>`;
-          });
-        }
-        document.getElementById('visit-rows').innerHTML = vH || '<tr><td colspan="7" class="text-muted py-4">لا توجد سجلات حالياً</td></tr>';
-
-        let mH = ''; 
-        if (data.movements) {
-          data.movements.forEach(r => {
-            mH += `<tr>
-              <td>${r.date}</td>
-              <td>${r.sup}</td>
-              <td class="fw-bold text-primary">${r.teacher}</td>
-              <td>${r.reason}</td>
-              <td>
-                <button onclick="delM(${r.row})" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash-fill"></i></button>
-              </td>
-            </tr>`;
-          });
-        }
-        document.getElementById('move-rows').innerHTML = mH || '<tr><td colspan="5" class="text-muted py-4">لا توجد سجلات حالياً</td></tr>';
-      } catch (err) {
-        console.error("خطأ في جلب البيانات:", err);
-      }
-    }
-
-    function trigEdit(row, d, n, l, s, h) { 
-      editRow = row; 
-      document.getElementById('v-d').value = d; 
-      document.getElementById('v-n').value = n; 
-      document.getElementById('v-l').value = l; 
-      document.getElementById('v-s').value = s; 
-      document.getElementById('v-h').value = h; 
-      document.getElementById('v-btn').innerHTML = '<i class="bi bi-check-lg"></i> تحديث'; 
-      document.getElementById('v-title').innerHTML = '<i class="bi bi-pencil-square me-2"></i> تعديل السجل'; 
-    }
-
-    async function saveV() { 
-      let d = document.getElementById('v-d').value, 
-          n = document.getElementById('v-n').value, 
-          l = document.getElementById('v-l').value, 
-          s = document.getElementById('v-s').value, 
-          h = document.getElementById('v-h').value; 
-
-      if (editRow) {
-        const res = await SupervisorAPI.updateVisitor(editRow, d, n, l, s, h);
-        alert(res.message || res); 
-        resetV(); 
-        loadData(); 
-      } else {
-        const res = await SupervisorAPI.saveVisitor(d, n, l, s, h);
-        alert(res.message || res); 
-        resetV(); 
-        loadData(); 
-      }
-    }
-
-    function resetV() { 
-      editRow = null; 
-      document.getElementById('v-btn').innerHTML = '<i class="bi bi-floppy-fill"></i> حفظ'; 
-      document.getElementById('v-title').innerHTML = '<i class="bi bi-clock-history me-2"></i> تسجيل ساعات زائر'; 
-    }
-
-    async function addS(type) { 
-      let val = document.getElementById('new-' + (type === 'name' ? 'n' : 's')).value; 
-      if (!val) return alert("الرجاء إدخال قيمة أولاً");
-      
-      const res = await SupervisorAPI.addSetting(type, val);
-      alert(res.message || res); 
-      loadData(); 
-    }
-
-    async function delS(type) { 
-      let val = document.getElementById('li-' + (type === 'name' ? 'n' : 's')).value; 
-      if (!val) return alert("الرجاء تحديد عنصر للحذف");
-      
-      const res = await SupervisorAPI.deleteSetting(type, val);
-      alert(res.message || res); 
-      loadData(); 
-    }
-
-    function showSec(s) { 
-      document.querySelectorAll('section').forEach(el => el.classList.add('d-none')); 
-      document.getElementById(s + '-sec').classList.remove('d-none'); 
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); 
-      
-      if (window.event && window.event.target) {
-        let link = window.event.target.closest('.nav-link');
-        if (link) link.classList.add('active');
-      }
-
-      if (window.innerWidth <= 768) toggleSidebar();
-    }
-
-    async function saveM() { 
-      const sup = document.getElementById('m-sup').value;
-      const t = document.getElementById('m-t').value;
-      const r = document.getElementById('m-r').value;
-
-      await SupervisorAPI.saveMovement(sup, t, r);
-      document.getElementById('m-t').value = ''; 
-      document.getElementById('m-r').value = ''; 
-      loadData(); 
-    }
-
-    async function delM(r) { 
-      if (confirm("تأكيد الحذف؟")) {
-        await SupervisorAPI.deleteMovement(r);
-        loadData(); 
-      }
-    }
-
-    async function delV(r) { 
-      if (confirm("تأكيد الحذف؟")) {
-        await SupervisorAPI.deleteVisitor(r);
-        loadData(); 
-      }
-    }
-  </script>
+  
+  <script src="./api.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
