@@ -3,34 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>استمارة التبرير - مؤسسة الجيل الثالث</title>
-  
-  <!-- إطار Bootstrap 5 -->
+  <title>استمارة التبرير</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  
-  <!-- ربط ملف التنسيقات الموحد -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="employee.css">
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 bg-light p-3">
+<body>
 
-  <div class="card p-4 shadow-sm w-100" style="max-width: 450px; border-radius: 20px; border: none; border-top: 5px solid #1e3a8a;">
+  <div class="card p-4">
     <div class="text-center mb-4">
-      <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjeojZRXAw4cRaMQwwj7L11hjP4UtD1rUVaIp2PgL4sMBolUofJc2HL87Fk--z79NLAj0_Mtv_067BC5aWgrmrXbtTLBcJ2apuFIbxAzp3RNYhiuxnRtvvvPmwAg3l0dBaunbrF9PT6JgSDI7nbAX627-nbM_6E6V6vwYOTGTxBGZSsLu3Spf3UPH6LCAQ=s379" style="max-width: 120px;" class="mb-2" alt="شعار المؤسسة">
-      <h5 class="fw-bold text-primary" style="color: #1e3a8a !important;">استمارة التبرير</h5>
+      <img src="https://i.ibb.co/W4j7RyBd/INSCRIPTIONS-1.png" class="mb-2 employee-logo" alt="Logo">
+      <h5 class="fw-bold text-primary">استمارة التبرير</h5>
       <p class="small text-muted">قسم الموارد البشرية</p>
     </div>
 
     <div id="form-container">
       <div class="mb-3">
-        <label class="form-label fw-bold" style="color: #1e3a8a; font-size: 0.9rem;">الرقم التعريفي (ID):</label>
+        <label class="form-label">الرقم التعريفي (ID):</label>
         <input type="number" id="emp-id" class="form-control" placeholder="أدخل رقمك الخاص">
       </div>
       <div class="mb-3">
-        <label class="form-label fw-bold" style="color: #1e3a8a; font-size: 0.9rem;">الاسم الكامل:</label>
+        <label class="form-label">الاسم الكامل:</label>
         <input type="text" id="emp-name" class="form-control" placeholder="اكتب اسمك">
       </div>
       <div class="mb-3">
-        <label class="form-label fw-bold" style="color: #1e3a8a; font-size: 0.9rem;">نوع العذر:</label>
+        <label class="form-label">نوع العذر:</label>
         <select id="emp-type" class="form-select">
           <option value="تأخر">تأخر صباحي / مسائي</option>
           <option value="غياب">غياب يوم كامل</option>
@@ -38,12 +34,10 @@
         </select>
       </div>
       <div class="mb-4">
-        <label class="form-label fw-bold" style="color: #1e3a8a; font-size: 0.9rem;">تفاصيل العذر والمبرر:</label>
+        <label class="form-label">تفاصيل العذر والمبرر:</label>
         <textarea id="emp-details" class="form-control" rows="3" placeholder="مثال: طارئ عائلي، موعد طبي..."></textarea>
       </div>
-      <button onclick="submitForm()" class="btn w-100 fw-bold text-white" id="btn-send" style="background-color: #1e3a8a; border-radius: 10px; padding: 12px;">
-        إرسال التبرير للإدارة
-      </button>
+      <button class="btn btn-submit w-100" id="btn-send">إرسال التبرير للإدارة</button>
     </div>
 
     <div id="success-msg" class="text-center d-none mt-4">
@@ -52,49 +46,7 @@
     </div>
   </div>
 
-  <!-- ربط ملف البرمجة الموحد -->
-  <script src="js/api.js"></script>
-  
-  <!-- السكريبت التفاعلي للاستمارة -->
-  <script>
-    async function submitForm() {
-      const id = document.getElementById('emp-id').value;
-      const name = document.getElementById('emp-name').value;
-      const type = document.getElementById('emp-type').value;
-      const details = document.getElementById('emp-details').value;
-      const btn = document.getElementById('btn-send');
-
-      if (!id || !name || !details) {
-        alert("الرجاء ملء جميع الحقول لتتمكن الإدارة من مراجعة طلبك.");
-        return;
-      }
-
-      btn.innerText = "جاري الإرسال...";
-      btn.disabled = true;
-
-      try {
-        // استدعاء دالة apiCall من ملف js/api.js
-        const res = await apiCall("saveJustification", { 
-          id: id, 
-          name: name, 
-          type: type, 
-          details: details 
-        });
-
-        if (res.status === "success" || res.success) {
-          document.getElementById('form-container').classList.add('d-none');
-          document.getElementById('success-msg').classList.remove('d-none');
-        } else {
-          alert("حدث خطأ أثناء الإرسال: " + (res.message || "يرجى المحاولة لاحقاً"));
-          btn.innerText = "إرسال التبرير للإدارة";
-          btn.disabled = false;
-        }
-      } catch (error) {
-        // رسالة تنبيه الفشل موجودة مسبقاً داخل api.js
-        btn.innerText = "إرسال التبرير للإدارة";
-        btn.disabled = false;
-      }
-    }
-  </script>
+  <script src="api.js"></script>
+  <script src="employee.js"></script>
 </body>
 </html>
