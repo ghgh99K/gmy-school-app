@@ -12,12 +12,10 @@
   <!-- مكتبة أيقونات Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  
-  <link rel="stylesheet" href="./style.css">
+  <!-- CSS المخصص -->
+  <link rel="stylesheet" href="supervisor.css">
 </head>
-<body data-page="supervisor">
+<body>
 
   <!-- زر فتح القائمة للشاشات الصغيرة -->
   <button class="menu-btn" id="menu-btn"><i class="bi bi-list fs-5"></i> القائمة</button>
@@ -28,16 +26,16 @@
   <!-- صفحة تسجيل الدخول -->
   <div id="login-page">
     <div class="login-card text-center">
-      <img src="https://i.ibb.co/W4j7RyBd/INSCRIPTIONS-1.png" class="mx-auto mb-3 logo-120">
-      <h4 class="fw-bold mb-4">بوابة الحراسة العامة</h4>
-      <form id="supervisor-login-form">
+      <img src="https://i.ibb.co/W4j7RyBd/INSCRIPTIONS-1.png" class="mx-auto mb-3 login-logo" alt="Logo">
+      <h4 class="fw-bold mb-4 text-dark">بوابة الحراسة العامة</h4>
+      <form id="login-form">
         <div class="mb-3 text-start">
           <input type="text" id="su" autocomplete="username" class="form-control" placeholder="اسم المستخدم">
         </div>
         <div class="mb-4 text-start">
           <input type="password" id="sp" autocomplete="current-password" class="form-control" placeholder="كلمة المرور">
         </div>
-        <button type="submit" class="btn btn-warning w-100 fw-bold py-2 shadow-sm text-white">
+        <button type="submit" class="btn btn-warning w-100 fw-bold py-2 shadow-sm text-white btn-login-submit">
           دخول البوابة <i class="bi bi-box-arrow-in-left ms-1"></i>
         </button>
       </form>
@@ -51,9 +49,9 @@
     <div class="sidebar" id="sidebar">
       <h5 class="text-center mb-4 sidebar-logo"><i class="bi bi-shield-lock-fill me-1"></i> الحراسة العامة</h5>
       <nav class="nav flex-column">
-        <a class="nav-link active" data-section="move"><i class="bi bi-person-walking"></i> سجل التحركات</a>
-        <a class="nav-link" data-section="visit"><i class="bi bi-person-badge"></i> الأساتذة الزائرون</a>
-        <a class="nav-link" data-section="set"><i class="bi bi-sliders"></i> إعدادات القوائم</a>
+        <a class="nav-link active" data-sec="move"><i class="bi bi-person-walking"></i> سجل التحركات</a>
+        <a class="nav-link" data-sec="visit"><i class="bi bi-person-badge"></i> الأساتذة الزائرون</a>
+        <a class="nav-link" data-sec="set"><i class="bi bi-sliders"></i> إعدادات القوائم</a>
       </nav>
     </div>
 
@@ -80,7 +78,7 @@
               <input id="m-r" class="form-control" placeholder="سبب التحرك">
             </div>
             <div class="col-md-2 d-flex align-items-end">
-              <button id="save-move-btn" class="btn btn-warning text-white w-100 fw-bold">
+              <button id="save-move-btn" class="btn btn-warning text-white w-100 fw-bold btn-custom-main">
                 <i class="bi bi-floppy-fill me-1"></i> حفظ السجل
               </button>
             </div>
@@ -131,7 +129,7 @@
               <input type="number" id="v-h" class="form-control" placeholder="0">
             </div>
             <div class="col-md-1 d-flex align-items-end">
-              <button id="save-visit-btn" id="v-btn" class="btn btn-success w-100 fw-bold">
+              <button id="v-btn" class="btn btn-success w-100 fw-bold">
                 <i class="bi bi-floppy-fill"></i> حفظ
               </button>
             </div>
@@ -171,7 +169,7 @@
                   <button id="add-name-btn" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
                 </div>
                 <select id="li-n" size="6" class="form-select mb-2"></select>
-                <button id="delete-name-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف الاسم المحدد</button>
+                <button id="del-name-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف الاسم المحدد</button>
               </div>
             </div>
 
@@ -183,7 +181,7 @@
                   <button id="add-subject-btn" class="btn btn-primary"><i class="bi bi-plus-lg"></i> إضافة</button>
                 </div>
                 <select id="li-s" size="6" class="form-select mb-2"></select>
-                <button id="delete-subject-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف المادة المحُددة</button>
+                <button id="del-subject-btn" class="btn btn-outline-danger btn-sm w-100 fw-bold"><i class="bi bi-trash-fill me-1"></i> حذف المادة المحُددة</button>
               </div>
             </div>
           </div>
@@ -193,8 +191,8 @@
     </div>
   </div>
 
-  
-  <script src="./api.js"></script>
-  <script src="./app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="api.js"></script>
+  <script src="supervisor.js"></script>
 </body>
 </html>
